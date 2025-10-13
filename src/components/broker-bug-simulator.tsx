@@ -312,7 +312,7 @@ export function BrokerBugSimulator() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col items-center justify-center text-center">
                 <div className="text-5xl font-bold font-headline">{fmt(balance)}</div>
-                <div className="mt-3 text-xs text-muted-foreground">Conta: {accountName || '—'}</div>
+                <div className="mt-3 text-xs text-muted-foreground">ID do usuário: {accountName || '—'}</div>
                  <div className="mt-1 text-xs text-muted-foreground">Corretora: {selectedBroker?.toUpperCase() || '—'}</div>
                 <div className="mt-8 w-full">
                   <div className="text-xs text-muted-foreground mb-2">Representação gráfica</div>
@@ -392,3 +392,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
