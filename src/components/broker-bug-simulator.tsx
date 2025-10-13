@@ -292,9 +292,9 @@ export function BrokerBugSimulator() {
               <CardContent>
                 <div className="font-code text-xs text-muted-foreground h-28 overflow-auto p-3 bg-black/40 rounded-md">
                   <p>&gt; Iniciado</p>
-                  {step >= 0.5 && <p>&gt; Corretora selecionada: {selectedBroker?.toUpperCase()}</p>}
+                  {step >= 0.5 && <p>&gt; Corretora selecionada: {selectedBroker?.toUpperCase() || '—'}</p>}
                   {step >= 1 && <p>&gt; Conta criada: {accountName || '—'}</p>}
-                  {step >= 2 && <p>&gt; Deposito simulado: R$1.000</p>}
+                  {step >= 2 && <p>&gt; Deposito efetuado: R$1.000</p>}
                   {step >= 3 && <p>&gt; Operação aberta: saldo total</p>}
                   {showHackerOverlay && <p className="text-yellow-400">&gt; Executando Glitch...</p>}
                   {isAnimating && <p className="text-green-400">&gt; Animação em progresso...</p>}
