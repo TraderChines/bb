@@ -230,7 +230,7 @@ export function BrokerBugSimulator() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-2 pt-2 border-l border-border/20">
                         <div className="space-y-2">
                           <Label htmlFor="accountName" className="text-muted-foreground text-xs">ID do usuario</Label>
-                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" disabled={step !== 0.5 || isVerifying} />
+                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} placeholder="Ex: 00000000" disabled={step !== 0.5 || isVerifying} />
                            {isVerifying && (
                             <div className="font-code text-xs text-green-400 h-12 overflow-auto pt-1">
                               <AnimatePresence>
