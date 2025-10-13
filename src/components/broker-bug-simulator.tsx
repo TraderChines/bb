@@ -154,7 +154,7 @@ export function BrokerBugSimulator() {
                 <ol className="space-y-3 text-muted-foreground">
                    <li className={getStepClass(0)}>
                     <a href="#" onClick={handleStep1Click} className="hover:underline">
-                      1 - Criar conta [ao clicar abre o link iqoption.com em uma nova aba) e libera a função de ID de usuario
+                      Criar Conta
                     </a>
                   </li>
                   {steps.map((text, index) => (
