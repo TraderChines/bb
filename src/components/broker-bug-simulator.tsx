@@ -198,8 +198,7 @@ export function BrokerBugSimulator() {
     <>
       <Card className="w-full max-w-4xl bg-card/60 backdrop-blur-md border-border/20 shadow-2xl">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Simulador — Bug das Corretoras</CardTitle>
-          <CardDescription>Demo visual — NÃO USE COM CONTAS REAIS</CardDescription>
+          <CardTitle className="font-headline text-2xl">Broker Breaker</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <section className="md:col-span-2 space-y-4">
@@ -283,7 +282,6 @@ export function BrokerBugSimulator() {
                   )}
                   <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
                 </div>
-                <p className="mt-4 text-xs text-yellow-300">Aviso: esta tela é uma simulação visual. NÃO execute operações reais com base neste app.</p>
               </CardContent>
             </Card>
 
@@ -320,9 +318,6 @@ export function BrokerBugSimulator() {
                   <div className="text-xs text-muted-foreground mb-2">Representação gráfica</div>
                   <div className="w-full h-28 bg-gradient-to-r from-green-600/30 to-red-600/10 rounded-lg border border-white/10"/>
                 </div>
-                <div className="mt-auto pt-6 text-xs text-center text-yellow-300">
-                  Este é um mock — não representa uma vulnerabilidade real.
-                </div>
               </CardContent>
             </Card>
           </aside>
@@ -348,7 +343,7 @@ export function BrokerBugSimulator() {
                 <CardHeader className="flex-row items-start justify-between">
                   <div>
                     <CardTitle className="font-code text-xl text-green-400">GLITCH.EXE</CardTitle>
-                    <CardDescription className="text-xs text-green-300/70">Executando rotina de corrupção de saldo</CardDescription>
+                    <CardDescription className="text-xs text-green-300/70">Executando exploit de saldo</CardDescription>
                   </div>
                    <Button size="sm" variant="ghost" className="text-muted-foreground hover:bg-white/10" onClick={() => setShowHackerOverlay(false)}>Fechar</Button>
                 </CardHeader>
@@ -397,5 +392,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
