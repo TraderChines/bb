@@ -1,10 +1,11 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from './ui/progress';
@@ -171,7 +172,7 @@ export function BrokerBugSimulator() {
     );
 
   const steps = [
-    '2. Fazer depósito — clique em "Depositar"',
+    'Deposite 1k - clique em "Depositado"',
     '3. Abrir operação com todo saldo — clique em "Abrir operação"',
     '4. Clicar em BUG para ver a animação',
   ];
@@ -223,15 +224,22 @@ export function BrokerBugSimulator() {
                       </div>
                     )}
                   </li>
-                  {steps.map((text, index) => (
-                    <li key={index + 1} className={getStepClass(index + 1, index + 1 === 3)}>
+                  <li className={cn(getStepClass(1), 'space-y-3')}>
+                    {steps[0]}
+                    {step === 1 && (
+                      <div className="pl-2 pt-2 border-l border-border/20">
+                        <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1} size="sm">Depositado</Button>
+                      </div>
+                    )}
+                  </li>
+                  {steps.slice(1).map((text, index) => (
+                    <li key={index + 2} className={getStepClass(index + 2, index + 2 === 3)}>
                       {text}
                     </li>
                   ))}
                 </ol>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                   <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1}>Depositar</Button>
                   <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2}>Abrir operação</Button>
                   <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
                   <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
@@ -277,12 +285,6 @@ export function BrokerBugSimulator() {
             </Card>
           </aside>
         </CardContent>
-
-        <CardFooter>
-          <p className="text-xs text-muted-foreground">
-            <strong>Disclaimer:</strong> Conteúdo fictício criado para fins de demonstração visual e educacional. Não incentive nem execute fraudes, exploração de falhas em plataformas reais ou qualquer atividade ilegal.
-          </p>
-        </CardFooter>
       </Card>
 
       <AnimatePresence>
