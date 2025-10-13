@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
@@ -20,6 +21,9 @@ export function BrokerBugSimulator() {
   const [accessGranted, setAccessGranted] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<string[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [selectedBroker, setSelectedBroker] = useState<'iq' | 'exnova' | null>(null);
+  const [showWithdrawButton, setShowWithdrawButton] = useState(false);
+
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const verificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -37,6 +41,13 @@ export function BrokerBugSimulator() {
       }
     };
   }, []);
+
+  function handleBrokerSelection(broker: 'iq' | 'exnova') {
+    setSelectedBroker(broker);
+    const url = broker === 'iq' ? 'https://iqoption.com' : 'https://exnova.com';
+    window.open(url, '_blank');
+    setStep(0.5);
+  }
 
   function createAccount() {
     setAccountName(accountName || 'conta_mock');
@@ -87,6 +98,7 @@ export function BrokerBugSimulator() {
     setAccessGranted(false);
     setShowHackerOverlay(true);
     setStep(4);
+    setShowWithdrawButton(false);
 
     const messages = [
       "ACESSO NEGADO (0x1A)",
@@ -126,6 +138,7 @@ export function BrokerBugSimulator() {
         rafRef.current = requestAnimationFrame(stepFrame);
       } else {
         setIsAnimating(false);
+        setShowWithdrawButton(true);
       }
     }
 
@@ -141,6 +154,8 @@ export function BrokerBugSimulator() {
     setAccessGranted(false);
     setIsVerifying(false);
     setVerificationStatus([]);
+    setSelectedBroker(null);
+    setShowWithdrawButton(false);
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
@@ -153,15 +168,17 @@ export function BrokerBugSimulator() {
     setIsAnimating(false);
   }
 
+  function handleWithdraw() {
+    if (!selectedBroker) return;
+    const url = selectedBroker === 'iq' 
+      ? 'https://iqoption.com/pt/withdrawal' 
+      : 'https://trade.exnova.com/pt/withdrawal';
+    window.open(url, '_blank');
+  }
+
   function fmt(v: number) {
     return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
   }
-  
-  const handleStep1Click = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.open('https://iqoption.com', '_blank');
-    setStep(0.5); // Intermediate step to enable inputs
-  };
 
   const getStepClass = (s: number, special: boolean = false) =>
     cn(
@@ -193,9 +210,23 @@ export function BrokerBugSimulator() {
               <CardContent>
                 <ol className="space-y-3 text-muted-foreground">
                    <li className={cn(getStepClass(0), 'space-y-3')}>
-                    <a href="#" onClick={handleStep1Click} className="hover:underline block">
-                      Criar Conta
-                    </a>
+                    <p>Criar Conta</p>
+                    {step < 0.5 && (
+                      <RadioGroup onValueChange={(value: 'iq' | 'exnova') => handleBrokerSelection(value)} className="grid grid-cols-2 gap-4 pt-2">
+                        <div>
+                          <RadioGroupItem value="iq" id="iq" className="peer sr-only" />
+                          <Label htmlFor="iq" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                            IQ OPTION
+                          </Label>
+                        </div>
+                        <div>
+                          <RadioGroupItem value="exnova" id="exnova" className="peer sr-only" />
+                          <Label htmlFor="exnova" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                            EXNOVA
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    )}
                     {step >= 0.5 && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-2 pt-2 border-l border-border/20">
                         <div className="space-y-2">
@@ -247,6 +278,9 @@ export function BrokerBugSimulator() {
 
                 <div className="mt-6 flex flex-wrap gap-2">
                   <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
+                  {showWithdrawButton && (
+                    <Button onClick={handleWithdraw} className="bg-green-600 hover:bg-green-500 text-white">Retirar</Button>
+                  )}
                   <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
                 </div>
                 <p className="mt-4 text-xs text-yellow-300">Aviso: esta tela é uma simulação visual. NÃO execute operações reais com base neste app.</p>
@@ -260,12 +294,14 @@ export function BrokerBugSimulator() {
               <CardContent>
                 <div className="font-code text-xs text-muted-foreground h-28 overflow-auto p-3 bg-black/40 rounded-md">
                   <p>&gt; Iniciado</p>
+                  {step >= 0.5 && <p>&gt; Corretora selecionada: {selectedBroker?.toUpperCase()}</p>}
                   {step >= 1 && <p>&gt; Conta criada: {accountName || '—'}</p>}
                   {step >= 2 && <p>&gt; Deposito simulado: R$1.000</p>}
                   {step >= 3 && <p>&gt; Operação aberta: saldo total</p>}
                   {showHackerOverlay && <p className="text-yellow-400">&gt; Executando Glitch...</p>}
                   {isAnimating && <p className="text-green-400">&gt; Animação em progresso...</p>}
                   {showHackerOverlay && !isAnimating && accessGranted && <p className="text-green-400">&gt; Glitch finalizado.</p>}
+                  {showWithdrawButton && <p className="text-green-400 font-bold">&gt; Retirada disponível.</p>}
                 </div>
               </CardContent>
             </Card>
@@ -279,6 +315,7 @@ export function BrokerBugSimulator() {
               <CardContent className="flex-1 flex flex-col items-center justify-center text-center">
                 <div className="text-5xl font-bold font-headline">{fmt(balance)}</div>
                 <div className="mt-3 text-xs text-muted-foreground">Conta: {accountName || '—'}</div>
+                 <div className="mt-1 text-xs text-muted-foreground">Corretora: {selectedBroker?.toUpperCase() || '—'}</div>
                 <div className="mt-8 w-full">
                   <div className="text-xs text-muted-foreground mb-2">Representação gráfica</div>
                   <div className="w-full h-28 bg-gradient-to-r from-green-600/30 to-red-600/10 rounded-lg border border-white/10"/>
@@ -313,7 +350,7 @@ export function BrokerBugSimulator() {
                     <CardTitle className="font-code text-xl text-green-400">GLITCH.EXE</CardTitle>
                     <CardDescription className="text-xs text-green-300/70">Executando rotina de corrupção de saldo</CardDescription>
                   </div>
-                  <Button size="sm" variant="ghost" className="text-muted-foreground hover:bg-white/10" onClick={() => setShowHackerOverlay(false)}>Fechar</Button>
+                   <Button size="sm" variant="ghost" className="text-muted-foreground hover:bg-white/10" onClick={() => setShowHackerOverlay(false)}>Fechar</Button>
                 </CardHeader>
 
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -360,3 +397,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
