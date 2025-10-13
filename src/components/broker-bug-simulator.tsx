@@ -12,7 +12,7 @@ import { Progress } from './ui/progress';
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
   const [accountName, setAccountName] = useState('');
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHackerOverlay, setShowHackerOverlay] = useState(false);
   const rafRef = useRef<number | null>(null);
@@ -71,7 +71,7 @@ export function BrokerBugSimulator() {
   }
 
   function resetSimulation() {
-    setBalance(1000);
+    setBalance(0);
     setStep(0);
     setAccountName('');
     setShowHackerOverlay(false);
