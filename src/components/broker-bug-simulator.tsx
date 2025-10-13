@@ -63,7 +63,6 @@ export function BrokerBugSimulator() {
         rafRef.current = requestAnimationFrame(stepFrame);
       } else {
         setIsAnimating(false);
-        setTimeout(() => setShowHackerOverlay(false), 1200);
       }
     }
 
@@ -132,14 +131,14 @@ export function BrokerBugSimulator() {
                   <div className="flex items-end justify-end">
                     <div className="flex flex-wrap gap-2">
                       <Button onClick={createAccount} disabled={step > 0}>enviar ID</Button>
-                      <Button variant="accent" onClick={simulateDeposit} disabled={step > 1 || !accountName}>Depositar (PIX sim)</Button>
+                      <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1}>Depositar (PIX sim)</Button>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step > 2 || step < 2}>Abrir operação</Button>
-                  <Button variant="destructive" onClick={runBugSimulation} disabled={step > 3 || step < 3}>BUG</Button>
+                  <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2}>Abrir operação</Button>
+                  <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
                   <Button variant="secondary" onClick={resetSimulation}>Resetar simulação</Button>
                 </div>
                 <p className="mt-4 text-xs text-yellow-300">Aviso: esta tela é uma simulação visual. NÃO execute operações reais com base neste app.</p>
