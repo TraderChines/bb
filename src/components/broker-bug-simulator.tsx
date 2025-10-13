@@ -50,7 +50,7 @@ export function BrokerBugSimulator() {
   }
 
   function createAccount() {
-    setAccountName(accountName || 'conta_mock');
+    setAccountName(accountName || 'trader_sim');
     setStep(1);
     setIsVerifying(false);
     setVerificationStatus([]);
