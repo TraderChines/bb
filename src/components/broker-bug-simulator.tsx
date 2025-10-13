@@ -15,12 +15,18 @@ export function BrokerBugSimulator() {
   const [balance, setBalance] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHackerOverlay, setShowHackerOverlay] = useState(false);
+  const [deniedMessages, setDeniedMessages] = useState<string[]>([]);
+  const [accessGranted, setAccessGranted] = useState(false);
   const rafRef = useRef<number | null>(null);
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
+      }
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
       }
     };
   }, []);
@@ -45,10 +51,36 @@ export function BrokerBugSimulator() {
 
   function runBugSimulation() {
     if (isAnimating) return;
+    
+    setDeniedMessages([]);
+    setAccessGranted(false);
     setShowHackerOverlay(true);
-    setIsAnimating(true);
     setStep(4);
 
+    const messages = [
+      "ACCESS DENIED (0x1A)",
+      "ACCESS DENIED (0x2F)",
+      "ACCESS DENIED (0x5B)",
+    ];
+
+    let messageIndex = 0;
+    const interval = setInterval(() => {
+      if (messageIndex < messages.length) {
+        setDeniedMessages(prev => [...prev, messages[messageIndex]]);
+        messageIndex++;
+      } else {
+        clearInterval(interval);
+        
+        animationTimeoutRef.current = setTimeout(() => {
+          setAccessGranted(true);
+          startBalanceAnimation();
+        }, 300);
+      }
+    }, 400);
+  }
+  
+  function startBalanceAnimation() {
+    setIsAnimating(true);
     const start = 1000;
     const end = 10000;
     const duration = 2200;
@@ -74,8 +106,13 @@ export function BrokerBugSimulator() {
     setStep(0);
     setAccountName('');
     setShowHackerOverlay(false);
+    setDeniedMessages([]);
+    setAccessGranted(false);
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
+    }
+     if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
     }
     setIsAnimating(false);
   }
@@ -156,7 +193,7 @@ export function BrokerBugSimulator() {
                   {step >= 2 && <p>&gt; Deposito simulado: R$1.000</p>}
                   {step >= 3 && <p>&gt; Operação aberta: saldo total</p>}
                   {isAnimating && <p className="text-green-400">&gt; Animação em progresso...</p>}
-                  {showHackerOverlay && !isAnimating && <p className="text-green-400">&gt; Glitch finalizado.</p>}
+                  {showHackerOverlay && !isAnimating && accessGranted && <p className="text-green-400">&gt; Glitch finalizado.</p>}
                 </div>
               </CardContent>
             </Card>
@@ -215,13 +252,30 @@ export function BrokerBugSimulator() {
 
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-3 bg-black/40 rounded-md border border-green-900/50">
-                    <div className="h-32 overflow-hidden font-code text-green-400 text-xs leading-tight">
-                      <p>/* EXEC LOG -- simulated */</p>
-                      <p>INIT -&gt; handshake ... OK</p>
-                      <p>AUTH -&gt; sandbox ... OK</p>
-                      <p>RUN -&gt; patch_balance();</p>
-                      <p>PATCH -&gt; writing 0xFF... 0x00</p>
-                      <p>WAIT -&gt; finalizing...</p>
+                    <div className="h-32 overflow-hidden font-code text-xs leading-tight">
+                        <AnimatePresence>
+                        {deniedMessages.map((msg, i) => (
+                          <motion.p
+                            key={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-red-500"
+                          >
+                           &gt; {msg}
+                          </motion.p>
+                        ))}
+                      </AnimatePresence>
+                      {accessGranted && (
+                         <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.1, duration: 0.2 }}
+                            className="text-green-400 font-bold"
+                          >
+                           &gt; ACCESS GRANTED
+                          </motion.p>
+                      )}
                     </div>
                   </div>
                   <div className="p-3 bg-black/40 rounded-md border border-green-900/50 flex flex-col items-center justify-center">
