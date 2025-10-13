@@ -17,8 +17,11 @@ export function BrokerBugSimulator() {
   const [showHackerOverlay, setShowHackerOverlay] = useState(false);
   const [deniedMessages, setDeniedMessages] = useState<string[]>([]);
   const [accessGranted, setAccessGranted] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState<string[]>([]);
+  const [isVerifying, setIsVerifying] = useState(false);
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const verificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     return () => {
@@ -28,12 +31,42 @@ export function BrokerBugSimulator() {
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current);
       }
+      if (verificationIntervalRef.current) {
+        clearInterval(verificationIntervalRef.current);
+      }
     };
   }, []);
 
   function createAccount() {
     setAccountName(accountName || 'conta_mock');
     setStep(1);
+    setIsVerifying(false);
+    setVerificationStatus([]);
+  }
+  
+  function handleVerification() {
+    if (isVerifying) return;
+    setIsVerifying(true);
+    setVerificationStatus([]);
+
+    const messages = [
+      "Enviando ID...",
+      "Analisando ID...",
+      "ID verificado.",
+    ];
+
+    let messageIndex = 0;
+    verificationIntervalRef.current = setInterval(() => {
+      if (messageIndex < messages.length) {
+        setVerificationStatus(prev => [...prev, messages[messageIndex]]);
+        messageIndex++;
+      } else {
+        if (verificationIntervalRef.current) clearInterval(verificationIntervalRef.current);
+        setTimeout(() => {
+          createAccount();
+        }, 500);
+      }
+    }, 600);
   }
 
   function simulateDeposit() {
@@ -104,11 +137,16 @@ export function BrokerBugSimulator() {
     setShowHackerOverlay(false);
     setDeniedMessages([]);
     setAccessGranted(false);
+    setIsVerifying(false);
+    setVerificationStatus([]);
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
      if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
+    }
+    if (verificationIntervalRef.current) {
+      clearInterval(verificationIntervalRef.current);
     }
     setIsAnimating(false);
   }
@@ -160,10 +198,26 @@ export function BrokerBugSimulator() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-2 pt-2 border-l border-border/20">
                         <div className="space-y-2">
                           <Label htmlFor="accountName" className="text-muted-foreground text-xs">ID do usuario</Label>
-                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" disabled={step !== 0.5} />
+                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" disabled={step !== 0.5 || isVerifying} />
+                           {isVerifying && (
+                            <div className="font-code text-xs text-green-400 h-12 overflow-auto pt-1">
+                              <AnimatePresence>
+                                {verificationStatus.map((msg, i) => (
+                                  <motion.p
+                                    key={i}
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                  >
+                                    &gt; {msg}
+                                  </motion.p>
+                                ))}
+                              </AnimatePresence>
+                            </div>
+                          )}
                         </div>
                         <div className="flex items-end">
-                           <Button onClick={createAccount} disabled={step !== 0.5} size="sm">enviar ID</Button>
+                           <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying} size="sm">enviar ID</Button>
                         </div>
                       </div>
                     )}
@@ -195,6 +249,7 @@ export function BrokerBugSimulator() {
                   {step >= 1 && <p>&gt; Conta criada: {accountName || '—'}</p>}
                   {step >= 2 && <p>&gt; Deposito simulado: R$1.000</p>}
                   {step >= 3 && <p>&gt; Operação aberta: saldo total</p>}
+                  {showHackerOverlay && <p className="text-yellow-400">&gt; Executando Glitch...</p>}
                   {isAnimating && <p className="text-green-400">&gt; Animação em progresso...</p>}
                   {showHackerOverlay && !isAnimating && accessGranted && <p className="text-green-400">&gt; Glitch finalizado.</p>}
                 </div>
