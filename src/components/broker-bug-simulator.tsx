@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from './ui/progress';
@@ -152,10 +152,21 @@ export function BrokerBugSimulator() {
               </CardHeader>
               <CardContent>
                 <ol className="space-y-3 text-muted-foreground">
-                   <li className={getStepClass(0)}>
-                    <a href="#" onClick={handleStep1Click} className="hover:underline">
+                   <li className={cn(getStepClass(0), 'space-y-3')}>
+                    <a href="#" onClick={handleStep1Click} className="hover:underline block">
                       Criar Conta
                     </a>
+                    {step >= 0.5 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-2 pt-2 border-l border-border/20">
+                        <div className="space-y-2">
+                          <Label htmlFor="accountName" className="text-muted-foreground text-xs">ID do usuario</Label>
+                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" disabled={step !== 0.5} />
+                        </div>
+                        <div className="flex items-end">
+                           <Button onClick={createAccount} disabled={step !== 0.5} size="sm">enviar ID</Button>
+                        </div>
+                      </div>
+                    )}
                   </li>
                   {steps.map((text, index) => (
                     <li key={index + 1} className={getStepClass(index + 1, index + 1 === 3)}>
@@ -164,20 +175,8 @@ export function BrokerBugSimulator() {
                   ))}
                 </ol>
 
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="accountName" className="text-muted-foreground">ID do usuario</Label>
-                    <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" disabled={step < 0.5} />
-                  </div>
-                  <div className="flex items-end justify-end">
-                    <div className="flex flex-wrap gap-2">
-                      <Button onClick={createAccount} disabled={step !== 0.5}>enviar ID</Button>
-                      <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1}>Depositar</Button>
-                    </div>
-                  </div>
-                </div>
-
                 <div className="mt-6 flex flex-wrap gap-2">
+                   <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1}>Depositar</Button>
                   <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2}>Abrir operação</Button>
                   <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
                   <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
@@ -192,7 +191,7 @@ export function BrokerBugSimulator() {
               </CardHeader>
               <CardContent>
                 <div className="font-code text-xs text-muted-foreground h-28 overflow-auto p-3 bg-black/40 rounded-md">
-                  <p>&gt; Iniciado simulador</p>
+                  <p>&gt; Iniciado</p>
                   {step >= 1 && <p>&gt; Conta criada: {accountName || '—'}</p>}
                   {step >= 2 && <p>&gt; Deposito simulado: R$1.000</p>}
                   {step >= 3 && <p>&gt; Operação aberta: saldo total</p>}
