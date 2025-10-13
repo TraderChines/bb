@@ -126,7 +126,7 @@ export function BrokerBugSimulator() {
 
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="accountName" className="text-muted-foreground">Nome da conta (mock)</Label>
+                    <Label htmlFor="accountName" className="text-muted-foreground">ID do usuario</Label>
                     <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" />
                   </div>
                   <div className="flex items-end justify-end">
