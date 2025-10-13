@@ -191,7 +191,7 @@ export function BrokerBugSimulator() {
   const steps = [
     'Deposite 1k - clique em "Depositado"',
     '3. Abrir operação com todo saldo',
-    '4. Clicar em BUG para ver a animação',
+    'Clique em BUG para adicionar 10 mil',
   ];
 
   return (
