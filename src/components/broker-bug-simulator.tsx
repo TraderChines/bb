@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Progress } from './ui/progress';
+import { Progress } from '@/components/ui/progress';
 
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
@@ -173,7 +173,7 @@ export function BrokerBugSimulator() {
 
   const steps = [
     'Deposite 1k - clique em "Depositado"',
-    '3. Abrir operação com todo saldo — clique em "Abrir operação"',
+    '3. Abrir operação com todo saldo',
     '4. Clicar em BUG para ver a animação',
   ];
 
@@ -232,15 +232,20 @@ export function BrokerBugSimulator() {
                       </div>
                     )}
                   </li>
-                  {steps.slice(1).map((text, index) => (
-                    <li key={index + 2} className={getStepClass(index + 2, index + 2 === 3)}>
-                      {text}
-                    </li>
-                  ))}
+                  <li className={cn(getStepClass(2), 'space-y-3')}>
+                    {steps[1]}
+                     {step === 2 && (
+                      <div className="pl-2 pt-2 border-l border-border/20">
+                        <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2} size="sm">Operação Aberta</Button>
+                      </div>
+                    )}
+                  </li>
+                  <li className={getStepClass(3, true)}>
+                    {steps[2]}
+                  </li>
                 </ol>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2}>Abrir operação</Button>
                   <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
                   <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
                 </div>
@@ -355,5 +360,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
