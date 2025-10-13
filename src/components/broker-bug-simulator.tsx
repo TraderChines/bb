@@ -249,7 +249,7 @@ export function BrokerBugSimulator() {
                           )}
                         </div>
                         <div className="flex items-end">
-                           <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying} size="sm">enviar ID</Button>
+                           <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying || accountName.length < 5} size="sm">enviar ID</Button>
                         </div>
                       </div>
                     )}
@@ -392,3 +392,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
