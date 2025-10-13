@@ -96,7 +96,7 @@ export function BrokerBugSimulator() {
     );
 
   const steps = [
-    '1. Criar conta (mock) — clique em "Criar conta"',
+    '1. Criar conta (mock) — clique em "enviar ID"',
     '2. Fazer depósito (simulado) — clique em "Depositar (PIX sim)"',
     '3. Abrir operação com todo saldo — clique em "Abrir operação"',
     '4. Clicar em BUG para ver a animação (fictícia)',
@@ -131,7 +131,7 @@ export function BrokerBugSimulator() {
                   </div>
                   <div className="flex items-end justify-end">
                     <div className="flex flex-wrap gap-2">
-                      <Button onClick={createAccount} disabled={step > 0}>Criar conta</Button>
+                      <Button onClick={createAccount} disabled={step > 0}>enviar ID</Button>
                       <Button variant="accent" onClick={simulateDeposit} disabled={step > 1 || !accountName}>Depositar (PIX sim)</Button>
                     </div>
                   </div>
