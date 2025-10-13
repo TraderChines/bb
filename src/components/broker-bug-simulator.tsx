@@ -58,9 +58,9 @@ export function BrokerBugSimulator() {
     setStep(4);
 
     const messages = [
-      "ACCESS DENIED (0x1A)",
-      "ACCESS DENIED (0x2F)",
-      "ACCESS DENIED (0x5B)",
+      "ACESSO NEGADO (0x1A)",
+      "ACESSO NEGADO (0x2F)",
+      "ACESSO NEGADO (0x5B)",
     ];
 
     let messageIndex = 0;
@@ -133,23 +133,23 @@ export function BrokerBugSimulator() {
 
   const steps = [
     '1. Criar conta (mock) — clique em "enviar ID"',
-    '2. Fazer depósito (simulado) — clique em "Depositar (PIX sim)"',
+    '2. Fazer depósito — clique em "Depositar (PIX sim)"',
     '3. Abrir operação com todo saldo — clique em "Abrir operação"',
-    '4. Clicar em BUG para ver a animação (fictícia)',
+    '4. Clicar em BUG para ver a animação',
   ];
 
   return (
     <>
       <Card className="w-full max-w-4xl bg-card/60 backdrop-blur-md border-border/20 shadow-2xl">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Simulador — Bug das Corretoras (FICTÍCIO)</CardTitle>
+          <CardTitle className="font-headline text-2xl">Simulador — Bug das Corretoras</CardTitle>
           <CardDescription>Demo visual — NÃO USE COM CONTAS REAIS</CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <section className="md:col-span-2 space-y-4">
             <Card className="bg-card/80">
               <CardHeader>
-                <CardTitle className="text-lg">Passos (simulação)</CardTitle>
+                <CardTitle className="text-lg">Passos</CardTitle>
               </CardHeader>
               <CardContent>
                 <ol className="space-y-3 text-muted-foreground">
@@ -184,7 +184,7 @@ export function BrokerBugSimulator() {
 
             <Card className="bg-card/80">
               <CardHeader>
-                <CardTitle className="text-lg">Log de ações (fictício)</CardTitle>
+                <CardTitle className="text-lg">Log de ações</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="font-code text-xs text-muted-foreground h-28 overflow-auto p-3 bg-black/40 rounded-md">
@@ -208,7 +208,7 @@ export function BrokerBugSimulator() {
                 <div className="text-5xl font-bold font-headline">{fmt(balance)}</div>
                 <div className="mt-3 text-xs text-muted-foreground">Conta: {accountName || '—'}</div>
                 <div className="mt-8 w-full">
-                  <div className="text-xs text-muted-foreground mb-2">Representação gráfica (fictícia)</div>
+                  <div className="text-xs text-muted-foreground mb-2">Representação gráfica</div>
                   <div className="w-full h-28 bg-gradient-to-r from-green-600/30 to-red-600/10 rounded-lg border border-white/10"/>
                 </div>
                 <div className="mt-auto pt-6 text-xs text-center text-yellow-300">
@@ -245,7 +245,7 @@ export function BrokerBugSimulator() {
                 <CardHeader className="flex-row items-start justify-between">
                   <div>
                     <CardTitle className="font-code text-xl text-green-400">GLITCH.EXE</CardTitle>
-                    <CardDescription className="text-xs text-green-300/70">Simulador: executando rotina de corrupção de saldo (fictício)</CardDescription>
+                    <CardDescription className="text-xs text-green-300/70">Simulador: executando rotina de corrupção de saldo</CardDescription>
                   </div>
                   <Button size="sm" variant="ghost" className="text-muted-foreground hover:bg-white/10" onClick={() => setShowHackerOverlay(false)}>Fechar</Button>
                 </CardHeader>
@@ -273,7 +273,7 @@ export function BrokerBugSimulator() {
                             transition={{ delay: 0.1, duration: 0.2 }}
                             className="text-green-400 font-bold"
                           >
-                           &gt; ACCESS GRANTED
+                           &gt; ACESSO CONCEDIDO
                           </motion.p>
                       )}
                     </div>
