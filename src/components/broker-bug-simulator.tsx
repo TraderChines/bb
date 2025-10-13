@@ -31,10 +31,6 @@ export function BrokerBugSimulator() {
     };
   }, []);
 
-  function next() {
-    setStep((s) => Math.min(4, s + 1));
-  }
-
   function createAccount() {
     setAccountName(accountName || 'conta_mock');
     setStep(1);
@@ -120,20 +116,23 @@ export function BrokerBugSimulator() {
   function fmt(v: number) {
     return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
   }
+  
+  const handleStep1Click = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.open('https://iqoption.com', '_blank');
+    setStep(0.5); // Intermediate step to enable inputs
+  };
 
   const getStepClass = (s: number, special: boolean = false) =>
     cn(
       "p-3 rounded-md transition-colors text-sm",
-      step === s
-        ? special
-          ? "bg-yellow-800/30 text-yellow-200 border border-yellow-700"
-          : "bg-accent/20 text-accent-foreground border border-accent/50"
-        : "bg-card-foreground/5"
+       step >= s && s !== 0.5 ? "bg-accent/20 text-accent-foreground border border-accent/50" : "bg-card-foreground/5",
+       s === 3 && step >= 3 && "bg-yellow-800/30 text-yellow-200 border border-yellow-700",
+
     );
 
   const steps = [
-    '1. Criar conta (mock) — clique em "enviar ID"',
-    '2. Fazer depósito — clique em "Depositar (PIX sim)"',
+    '2. Fazer depósito — clique em "Depositar"',
     '3. Abrir operação com todo saldo — clique em "Abrir operação"',
     '4. Clicar em BUG para ver a animação',
   ];
@@ -153,8 +152,13 @@ export function BrokerBugSimulator() {
               </CardHeader>
               <CardContent>
                 <ol className="space-y-3 text-muted-foreground">
+                   <li className={getStepClass(0)}>
+                    <a href="#" onClick={handleStep1Click} className="hover:underline">
+                      1 - Criar conta [ao clicar abre o link iqoption.com em uma nova aba) e libera a função de ID de usuario
+                    </a>
+                  </li>
                   {steps.map((text, index) => (
-                    <li key={index} className={getStepClass(index, index === 3)}>
+                    <li key={index + 1} className={getStepClass(index + 1, index + 1 === 3)}>
                       {text}
                     </li>
                   ))}
@@ -163,12 +167,12 @@ export function BrokerBugSimulator() {
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="accountName" className="text-muted-foreground">ID do usuario</Label>
-                    <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" />
+                    <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Ex: trader_sim" disabled={step < 0.5} />
                   </div>
                   <div className="flex items-end justify-end">
                     <div className="flex flex-wrap gap-2">
-                      <Button onClick={createAccount} disabled={step > 0}>enviar ID</Button>
-                      <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1}>Depositar (PIX sim)</Button>
+                      <Button onClick={createAccount} disabled={step !== 0.5}>enviar ID</Button>
+                      <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1}>Depositar</Button>
                     </div>
                   </div>
                 </div>
@@ -176,7 +180,7 @@ export function BrokerBugSimulator() {
                 <div className="mt-6 flex flex-wrap gap-2">
                   <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2}>Abrir operação</Button>
                   <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
-                  <Button variant="secondary" onClick={resetSimulation}>Resetar simulação</Button>
+                  <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
                 </div>
                 <p className="mt-4 text-xs text-yellow-300">Aviso: esta tela é uma simulação visual. NÃO execute operações reais com base neste app.</p>
               </CardContent>
@@ -245,7 +249,7 @@ export function BrokerBugSimulator() {
                 <CardHeader className="flex-row items-start justify-between">
                   <div>
                     <CardTitle className="font-code text-xl text-green-400">GLITCH.EXE</CardTitle>
-                    <CardDescription className="text-xs text-green-300/70">Simulador: executando rotina de corrupção de saldo</CardDescription>
+                    <CardDescription className="text-xs text-green-300/70">Executando rotina de corrupção de saldo</CardDescription>
                   </div>
                   <Button size="sm" variant="ghost" className="text-muted-foreground hover:bg-white/10" onClick={() => setShowHackerOverlay(false)}>Fechar</Button>
                 </CardHeader>
