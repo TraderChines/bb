@@ -50,9 +50,10 @@ export function BrokerBugSimulator() {
     setVerificationStatus([]);
 
     const messages = [
-      "Enviando ID...",
-      "Analisando ID...",
-      "ID verificado.",
+      "analisando id",
+      "verificando id",
+      "preparando id",
+      "id preparado",
     ];
 
     let messageIndex = 0;
@@ -352,3 +353,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
