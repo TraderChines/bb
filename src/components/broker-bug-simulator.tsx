@@ -29,6 +29,7 @@ export function BrokerBugSimulator() {
   const [isSystemOnline, setIsSystemOnline] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [showDepositedButton, setShowDepositedButton] = useState(false);
+  const [depositClicked, setDepositClicked] = useState(false);
 
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -53,7 +54,7 @@ export function BrokerBugSimulator() {
   function handleBrokerSelection(broker: 'iq' | 'exnova') {
     setSelectedBroker(broker);
     const url = broker === 'iq' ? 'https://iqoption.com' : 'https://exnova.org/';
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
     setStep(0.5);
   }
 
@@ -98,12 +99,13 @@ export function BrokerBugSimulator() {
   }
 
   function handleDepositClick() {
-    if (!selectedBroker) return;
+    if (!selectedBroker || depositClicked) return;
     const url = selectedBroker === 'iq' 
       ? 'https://iqoption.com/pt/counting' 
       : 'https://trade.exnova.com/pt/counting';
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
     setShowDepositedButton(true);
+    setDepositClicked(true);
   }
 
   function simulateDeposit() {
@@ -183,6 +185,7 @@ export function BrokerBugSimulator() {
     setShowWithdrawButton(false);
     setShowDepositedButton(false);
     setValidationError(null);
+    setDepositClicked(false);
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
@@ -200,7 +203,7 @@ export function BrokerBugSimulator() {
     const url = selectedBroker === 'iq' 
       ? 'https://iqoption.com/pt/withdrawal' 
       : 'https://trade.exnova.com/pt/withdrawal';
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   function fmt(v: number) {
@@ -347,7 +350,7 @@ export function BrokerBugSimulator() {
                     </div>
                     {step === 1 && (
                       <div className="pl-10 pt-4 w-full flex items-center gap-2">
-                        <Button variant="outline" onClick={handleDepositClick} disabled={step !== 1} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITAR</Button>
+                        <Button variant="outline" onClick={handleDepositClick} disabled={step !== 1 || depositClicked} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITAR</Button>
                         {showDepositedButton && (
                           <Button variant="outline" onClick={simulateDeposit} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITADO</Button>
                         )}
@@ -491,9 +494,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
-
-    
-
-    
