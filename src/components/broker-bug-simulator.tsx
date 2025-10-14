@@ -191,7 +191,7 @@ export function BrokerBugSimulator() {
 
   const steps = [
     { text: 'Conecte-se à sua conta da corretora.', step: 0 },
-    { text: 'Faça um depósito inicial para começar.', step: 1 },
+    { text: 'Faça um depósito de R$1.000,00 para começar.', step: 1 },
     { text: 'Inicie uma operação com seu saldo.', step: 2 },
     { text: 'Execute o exploit para aumentar o saldo.', step: 3 },
   ];
@@ -323,8 +323,9 @@ export function BrokerBugSimulator() {
               <CardContent className="flex-1 flex flex-col items-center justify-center text-center">
                 <div className="text-5xl font-bold font-code text-shadow shadow-primary">{fmt(balance)}</div>
                 <div className="mt-4 text-xs text-muted-foreground font-code">CORRETORA: {selectedBroker?.toUpperCase() || 'N/A'}</div>
-                <div className="mt-1 text-xs text-muted-foreground font-code">ID: {accountName || 'N/A'}</div>
+                <div className="mt-1 text-xs text-muted-foreground font-code">ID DO USUÁRIO: {accountName || 'N/A'}</div>
                 <div className="mt-8 w-full px-4">
+                  <div className='text-xs text-muted-foreground mb-2'>Progresso</div>
                   <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
                    {showWithdrawButton && (
                     <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}}>
