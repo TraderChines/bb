@@ -295,19 +295,22 @@ export function BrokerBugSimulator() {
                       </div>
                     )}
                   </li>
-                  <li className={getStepClass(3)}>
-                     <StepIcon s={3} />
-                    <p>{steps[3].text}</p>
+                  <li className={cn(getStepClass(3), 'flex-col')}>
+                     <div className='flex items-start gap-4 w-full'>
+                        <StepIcon s={3} />
+                        <p className='flex-1'>{steps[3].text}</p>
+                     </div>
+                     {step === 3 && (
+                        <div className="pl-10 pt-4 w-full flex flex-wrap gap-4">
+                           <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-code tracking-widest text-base shadow-lg shadow-red-500/10 hover:shadow-red-500/20">
+                              <ShieldAlert className="mr-2" />
+                              EXECUTAR BUG
+                           </Button>
+                           <Button variant="secondary" onClick={resetSimulation} className="font-code">REINICIAR</Button>
+                        </div>
+                     )}
                   </li>
                 </ol>
-
-                <div className="mt-8 flex flex-wrap gap-4 border-t border-primary/20 pt-6">
-                  <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-code tracking-widest text-base shadow-lg shadow-red-500/10 hover:shadow-red-500/20">
-                    <ShieldAlert className="mr-2" />
-                    EXECUTAR BUG
-                  </Button>
-                  <Button variant="secondary" onClick={resetSimulation} className="font-code">REINICIAR</Button>
-                </div>
               </CardContent>
             </Card>
           </section>
@@ -405,5 +408,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
