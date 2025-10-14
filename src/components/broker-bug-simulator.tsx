@@ -397,7 +397,7 @@ export function BrokerBugSimulator() {
                               transition={{ delay: 0.4, duration: 0.2 }}
                               className="text-primary font-bold flex items-center gap-2"
                             >
-                            <CheckCircle size={16}/> &gt; SALDO INJETADO. EXECUTADO COM SUCESSO.
+                            <CheckCircle size={16}/> &gt; SALDO INJETADO COM SUCESSO.
                             </motion.p>
                           )}
                         </>
@@ -420,6 +420,8 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
 
     
 
