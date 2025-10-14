@@ -211,7 +211,7 @@ export function BrokerBugSimulator() {
             <Cpu size={28} className="text-primary" />
             <div>
               <CardTitle className="font-code text-2xl tracking-widest text-primary">BROKER BREAKER</CardTitle>
-              <CardDescription className="font-code text-xs text-primary/70">EXPLORAÇÃO DE SALDO</CardDescription>
+              <CardDescription className="font-code text-xs text-primary/70">INJETOR DE SALDO</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -420,6 +420,8 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
 
     
 
