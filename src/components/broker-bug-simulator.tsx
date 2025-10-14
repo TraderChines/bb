@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { AlertCircle, ArrowRight, CheckCircle, Cpu, ShieldAlert, XCircle } from 'lucide-react';
+import { AlertCircle, ArrowRight, CheckCircle, Cpu, Eye, EyeOff, ShieldAlert, XCircle } from 'lucide-react';
 
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
@@ -24,6 +24,7 @@ export function BrokerBugSimulator() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [selectedBroker, setSelectedBroker] = useState<'iq' | 'exnova' | null>(null);
   const [showWithdrawButton, setShowWithdrawButton] = useState(false);
+  const [showId, setShowId] = useState(false);
 
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -248,7 +249,27 @@ export function BrokerBugSimulator() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-10 pt-4 w-full">
                         <div className="space-y-2">
                           <Label htmlFor="accountName" className="text-muted-foreground text-xs font-code">SEU ID DE USUÁRIO</Label>
-                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} placeholder="00000000" disabled={step !== 0.5 || isVerifying} className="font-code"/>
+                          <div className="relative">
+                            <Input 
+                              id="accountName" 
+                              type={showId ? 'text' : 'password'}
+                              value={accountName} 
+                              onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} 
+                              placeholder="00000000" 
+                              disabled={step !== 0.5 || isVerifying} 
+                              className="font-code pr-10"
+                            />
+                            <Button 
+                              type="button"
+                              size="icon" 
+                              variant="ghost" 
+                              className="absolute inset-y-0 right-0 h-full w-10 text-muted-foreground hover:text-primary-foreground"
+                              onClick={() => setShowId(!showId)}
+                              disabled={step !== 0.5 || isVerifying}
+                            >
+                              {showId ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </Button>
+                          </div>
                            {isVerifying && (
                             <div className="font-code text-xs text-primary h-12 overflow-auto pt-1">
                               <AnimatePresence>
@@ -420,8 +441,6 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
 
     
 
