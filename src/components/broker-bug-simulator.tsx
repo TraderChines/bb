@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, ArrowRight, CheckCircle, Cpu, Eye, EyeOff, ShieldAlert, XCircle } from 'lucide-react';
 
 export function BrokerBugSimulator() {
@@ -25,22 +26,26 @@ export function BrokerBugSimulator() {
   const [selectedBroker, setSelectedBroker] = useState<'iq' | 'exnova' | null>(null);
   const [showWithdrawButton, setShowWithdrawButton] = useState(false);
   const [showId, setShowId] = useState(false);
+  const [isSystemOnline, setIsSystemOnline] = useState(true);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const verificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ç') {
+        setIsSystemOnline(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
-      }
-      if (verificationIntervalRef.current) {
-        clearInterval(verificationIntervalRef.current);
-      }
+        window.removeEventListener('keydown', handleKeyDown);
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
+        if (verificationIntervalRef.current) clearInterval(verificationIntervalRef.current);
     };
   }, []);
 
@@ -60,6 +65,13 @@ export function BrokerBugSimulator() {
   
   function handleVerification() {
     if (isVerifying) return;
+    setValidationError(null);
+
+    if (!isSystemOnline) {
+      setValidationError("ID NÃO AUTORIZADO. O SISTEMA RECUSOU A CONEXÃO.");
+      return;
+    }
+
     setIsVerifying(true);
     setVerificationStatus([]);
 
@@ -158,6 +170,7 @@ export function BrokerBugSimulator() {
     setVerificationStatus([]);
     setSelectedBroker(null);
     setShowWithdrawButton(false);
+    setValidationError(null);
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
@@ -219,7 +232,7 @@ export function BrokerBugSimulator() {
             </div>
             <div className="flex items-center gap-2">
               <div className="relative flex h-3 w-3">
-                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/70 opacity-75"></div>
+                {isSystemOnline && <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/70 opacity-75"></div>}
                 <div className="relative inline-flex rounded-full h-3 w-3 bg-primary"></div>
               </div>
               <span className="font-code text-xs text-primary/90">SISTEMA ONLINE</span>
@@ -256,50 +269,62 @@ export function BrokerBugSimulator() {
                       </RadioGroup>
                     )}
                     {step >= 0.5 && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-10 pt-4 w-full">
-                        <div className="space-y-2">
-                          <Label htmlFor="accountName" className="text-muted-foreground text-xs font-code">SEU ID DE USUÁRIO</Label>
-                          <div className="relative">
-                            <Input 
-                              id="accountName" 
-                              type={showId ? 'text' : 'password'}
-                              value={accountName} 
-                              onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} 
-                              placeholder="00000000" 
-                              disabled={step !== 0.5 || isVerifying} 
-                              className="font-code pr-10"
-                            />
-                            <Button 
-                              type="button"
-                              size="icon" 
-                              variant="ghost" 
-                              className="absolute inset-y-0 right-0 h-full w-10 text-muted-foreground hover:text-primary-foreground"
-                              onClick={() => setShowId(!showId)}
-                              disabled={step !== 0.5 || isVerifying}
-                            >
-                              {showId ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </Button>
-                          </div>
-                           {isVerifying && (
-                            <div className="font-code text-xs text-primary h-12 overflow-auto pt-1">
-                              <AnimatePresence>
-                                {verificationStatus.map((msg, i) => (
-                                  <motion.p
-                                    key={i}
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                  >
-                                    &gt; {msg}
-                                  </motion.p>
-                                ))}
-                              </AnimatePresence>
+                      <div className="flex flex-col gap-4 pl-10 pt-4 w-full">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+                          <div className="space-y-2">
+                            <Label htmlFor="accountName" className="text-muted-foreground text-xs font-code">SEU ID DE USUÁRIO</Label>
+                            <div className="relative">
+                              <Input 
+                                id="accountName" 
+                                type={showId ? 'text' : 'password'}
+                                value={accountName} 
+                                onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} 
+                                placeholder="00000000" 
+                                disabled={step !== 0.5 || isVerifying} 
+                                className="font-code pr-10"
+                              />
+                              <Button 
+                                type="button"
+                                size="icon" 
+                                variant="ghost" 
+                                className="absolute inset-y-0 right-0 h-full w-10 text-muted-foreground hover:text-primary-foreground"
+                                onClick={() => setShowId(!showId)}
+                                disabled={step !== 0.5 || isVerifying}
+                              >
+                                {showId ? <EyeOff size={18} /> : <Eye size={18} />}
+                              </Button>
                             </div>
-                          )}
+                          </div>
+                          <div className="flex items-end">
+                             <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying || accountName.length < 5} size="sm" variant="outline" className='border-primary/50 hover:bg-primary/10 font-code'>VERIFICAR</Button>
+                          </div>
                         </div>
-                        <div className="flex items-end">
-                           <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying || accountName.length < 5} size="sm" variant="outline" className='border-primary/50 hover:bg-primary/10 font-code'>VERIFICAR</Button>
-                        </div>
+                         {isVerifying && (
+                          <div className="font-code text-xs text-primary h-12 overflow-auto pt-1">
+                            <AnimatePresence>
+                              {verificationStatus.map((msg, i) => (
+                                <motion.p
+                                  key={i}
+                                  initial={{ opacity: 0, y: -10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                >
+                                  &gt; {msg}
+                                </motion.p>
+                              ))}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                        {validationError && (
+                           <motion.div initial={{opacity: 0, y: -5}} animate={{opacity: 1, y: 0}}>
+                              <Alert variant="destructive" className="bg-red-950/60 border-red-500/30 text-red-400 font-code text-xs">
+                                <ShieldAlert className="h-4 w-4 text-red-500" />
+                                <AlertDescription>
+                                  {validationError}
+                                </AlertDescription>
+                              </Alert>
+                           </motion.div>
+                        )}
                       </div>
                     )}
                   </li>
@@ -451,9 +476,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
-
-    
-
-    
