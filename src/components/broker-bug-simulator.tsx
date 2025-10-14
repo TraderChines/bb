@@ -63,10 +63,9 @@ export function BrokerBugSimulator() {
     setVerificationStatus([]);
 
     const messages = [
-      "analisando id",
-      "verificando id",
-      "preparando id",
-      "id preparado",
+      "AUTENTICANDO TOKEN...",
+      "VERIFICANDO CREDENCIAIS...",
+      "CONEXÃO ESTABELECIDA.",
     ];
 
     let messageIndex = 0;
@@ -102,9 +101,9 @@ export function BrokerBugSimulator() {
     setShowWithdrawButton(false);
 
     const messages = [
-      "ACESSO NEGADO (0x1A)",
-      "ACESSO NEGADO (0x2F)",
-      "ACESSO NEGADO (0x5B)",
+      "> INICIANDO BYPASS DE FIREWALL...",
+      "> ACESSO AO KERNEL REJEITADO... TENTANDO NOVAMENTE...",
+      "> ESCALANDO PRIVILÉGIOS DE ACESSO...",
     ];
 
     let messageIndex = 0;
@@ -120,7 +119,7 @@ export function BrokerBugSimulator() {
           startBalanceAnimation();
         }, 300);
       }
-    }, 400);
+    }, 500);
   }
   
   function startBalanceAnimation() {
@@ -260,7 +259,7 @@ export function BrokerBugSimulator() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3 }}
                                   >
-                                    &gt; {msg}...
+                                    &gt; {msg}
                                   </motion.p>
                                 ))}
                               </AnimatePresence>
@@ -359,8 +358,8 @@ export function BrokerBugSimulator() {
               <Card className="bg-black/90 border border-primary/50 shadow-2xl shadow-primary/20">
                 <CardHeader className="flex-row items-start justify-between">
                   <div>
-                    <CardTitle className="font-code text-xl text-primary tracking-widest">GLITCH.EXE</CardTitle>
-                    <CardDescription className="text-xs text-primary/70 font-code">EXECUTANDO EXPLOIT DE SALDO...</CardDescription>
+                    <CardTitle className="font-code text-xl text-primary tracking-widest">BREAKER_V2.EXE</CardTitle>
+                    <CardDescription className="text-xs text-primary/70 font-code">INJETANDO VETOR DE EXPLORAÇÃO...</CardDescription>
                   </div>
                    <Button size="icon" variant="ghost" className="text-muted-foreground hover:bg-white/10 h-8 w-8" onClick={() => setShowHackerOverlay(false)}><XCircle/></Button>
                 </CardHeader>
@@ -377,7 +376,7 @@ export function BrokerBugSimulator() {
                             transition={{ duration: 0.2, delay: i * 0.1 }}
                             className="text-red-400 flex items-center gap-2"
                           >
-                           <XCircle size={16}/> {msg}
+                           <ShieldAlert size={16}/> {msg}
                           </motion.p>
                         ))}
                       </AnimatePresence>
@@ -388,7 +387,7 @@ export function BrokerBugSimulator() {
                             transition={{ delay: 0.2, duration: 0.2 }}
                             className="text-primary font-bold flex items-center gap-2"
                           >
-                           <CheckCircle size={16}/> ACESSO CONCEDIDO
+                           <CheckCircle size={16}/> > VIOLAÇÃO BEM-SUCEDIDA! ACESSO TOTAL.
                           </motion.p>
                       )}
                     </div>
@@ -409,3 +408,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
