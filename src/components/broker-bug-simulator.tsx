@@ -366,7 +366,7 @@ export function BrokerBugSimulator() {
 
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-black/60 rounded-md border border-primary/20">
-                    <div className="h-48 overflow-hidden font-code text-sm leading-relaxed">
+                    <div className="h-56 overflow-hidden font-code text-sm leading-relaxed">
                         <AnimatePresence>
                         {deniedMessages.map((msg, i) => (
                           <motion.p
@@ -420,5 +420,7 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
 
     
