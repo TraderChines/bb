@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { AlertCircle, ArrowRight, CheckCircle, Cpu, ShieldAlert, XCircle, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, CheckCircle, Cpu, ShieldAlert, XCircle } from 'lucide-react';
 
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
@@ -193,7 +193,7 @@ export function BrokerBugSimulator() {
     { text: 'Conecte-se à sua conta da corretora.', step: 0 },
     { text: 'Faça um depósito de R$1.000,00 para começar.', step: 1 },
     { text: 'Inicie uma operação com seu saldo.', step: 2 },
-    { text: 'Execute o exploit para aumentar o saldo.', step: 3 },
+    { text: 'Execute o BUG para multiplicar o saldo.', step: 3 },
   ];
 
   const StepIcon = ({ s }: {s: number}) => {
@@ -291,7 +291,7 @@ export function BrokerBugSimulator() {
                     </div>
                      {step === 2 && (
                       <div className="pl-10 pt-4 w-full">
-                        <Button className="bg-sky-600/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">ABRIR OPERAÇÃO</Button>
+                        <Button className="bg-sky-600/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">OPERAÇÃO ABERTA</Button>
                       </div>
                     )}
                   </li>
@@ -302,7 +302,7 @@ export function BrokerBugSimulator() {
                      </div>
                      {step === 3 && (
                         <div className="pl-10 pt-4 w-full flex flex-wrap gap-4">
-                           <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-code tracking-widest text-base shadow-lg shadow-red-500/10 hover:shadow-red-500/20">
+                           <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/40 hover:bg-red-500/50 text-red-200 border border-red-500/50 font-code tracking-widest text-base shadow-lg shadow-red-500/20 hover:shadow-red-500/30">
                               <ShieldAlert className="mr-2" />
                               EXECUTAR BUG
                            </Button>
@@ -362,7 +362,7 @@ export function BrokerBugSimulator() {
                     <CardTitle className="font-code text-xl text-primary tracking-widest">GLITCH.EXE</CardTitle>
                     <CardDescription className="text-xs text-primary/70 font-code">EXECUTANDO EXPLOIT DE SALDO...</CardDescription>
                   </div>
-                   <Button size="icon" variant="ghost" className="text-muted-foreground hover:bg-white/10 h-8 w-8" onClick={() => setShowHackerOverlay(false)}><X/></Button>
+                   <Button size="icon" variant="ghost" className="text-muted-foreground hover:bg-white/10 h-8 w-8" onClick={() => setShowHackerOverlay(false)}><XCircle/></Button>
                 </CardHeader>
 
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
