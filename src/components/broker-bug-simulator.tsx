@@ -315,8 +315,8 @@ export function BrokerBugSimulator() {
                 <div className="mt-3 text-xs text-muted-foreground">Corretora: {selectedBroker?.toUpperCase() || '—'}</div>
                 <div className="mt-1 text-xs text-muted-foreground">ID do usuário: {accountName || '—'}</div>
                 <div className="mt-8 w-full">
-                  <div className="text-xs text-muted-foreground mb-2">Representação gráfica</div>
-                  <div className="w-full h-28 bg-gradient-to-r from-green-600/30 to-red-600/10 rounded-lg border border-white/10"/>
+                  <div className="text-xs text-muted-foreground mb-2">Progresso</div>
+                  <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-green-500" />
                 </div>
               </CardContent>
             </Card>
@@ -392,5 +392,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
