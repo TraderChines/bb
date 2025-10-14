@@ -36,7 +36,8 @@ export function BrokerBugSimulator() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ç') {
+      // Using event.code ('Semicolon' for 'ç' on many layouts) for better reliability
+      if (event.key === 'ç' || event.code === 'Semicolon') {
         setIsSystemOnline(prev => !prev);
       }
     };
