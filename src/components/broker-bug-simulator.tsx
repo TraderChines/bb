@@ -277,9 +277,6 @@ export function BrokerBugSimulator() {
 
                 <div className="mt-6 flex flex-wrap gap-2">
                   <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
-                  {showWithdrawButton && (
-                    <Button onClick={handleWithdraw} className="bg-green-600 hover:bg-green-500 text-white">Retirar</Button>
-                  )}
                   <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
                 </div>
               </CardContent>
@@ -317,6 +314,9 @@ export function BrokerBugSimulator() {
                 <div className="mt-8 w-full">
                   <div className="text-xs text-muted-foreground mb-2">Progresso</div>
                   <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-green-500" />
+                   {showWithdrawButton && (
+                    <Button onClick={handleWithdraw} className="bg-green-600 hover:bg-green-500 text-white mt-4 w-full">Retirar</Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
