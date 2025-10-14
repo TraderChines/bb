@@ -300,12 +300,11 @@ export function BrokerBugSimulator() {
                         <p className='flex-1'>{steps[3].text}</p>
                      </div>
                      {step === 3 && (
-                        <div className="pl-10 pt-4 w-full flex flex-wrap gap-4">
+                        <div className="pl-10 pt-4 w-full">
                            <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/40 hover:bg-red-500/50 text-red-200 border border-red-500/50 font-code tracking-widest text-base shadow-lg shadow-red-500/20 hover:shadow-red-500/30">
                               <ShieldAlert className="mr-2" />
                               EXECUTAR BUG
                            </Button>
-                           <Button variant="secondary" onClick={resetSimulation} className="font-code">REINICIAR</Button>
                         </div>
                      )}
                   </li>
@@ -327,10 +326,11 @@ export function BrokerBugSimulator() {
                   <div className='text-xs text-muted-foreground mb-2'>Progresso</div>
                   <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
                    {showWithdrawButton && (
-                    <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}}>
+                    <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="flex flex-col gap-2">
                       <Button onClick={handleWithdraw} className="bg-primary/90 hover:bg-primary text-white mt-6 w-full font-code tracking-widest text-base shadow-lg shadow-primary/20 hover:shadow-primary/30">
                         RETIRAR SALDO
                       </Button>
+                      <Button variant="secondary" onClick={resetSimulation} className="font-code w-full">REINICIAR</Button>
                     </motion.div>
                   )}
                 </div>
