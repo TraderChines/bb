@@ -28,6 +28,7 @@ export function BrokerBugSimulator() {
   const [showId, setShowId] = useState(false);
   const [isSystemOnline, setIsSystemOnline] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [showDepositedButton, setShowDepositedButton] = useState(false);
 
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +52,7 @@ export function BrokerBugSimulator() {
 
   function handleBrokerSelection(broker: 'iq' | 'exnova') {
     setSelectedBroker(broker);
-    const url = broker === 'iq' ? 'https://iqoption.com' : 'https://exnova.com';
+    const url = broker === 'iq' ? 'https://iqoption.com' : 'https://exnova.org/';
     window.open(url, '_blank');
     setStep(0.5);
   }
@@ -78,6 +79,7 @@ export function BrokerBugSimulator() {
     const messages = [
       "AUTENTICANDO TOKEN...",
       "VERIFICANDO CREDENCIAIS...",
+      "ID VALIDADO...",
       "CONEXÃO ESTABELECIDA.",
     ];
 
@@ -93,6 +95,15 @@ export function BrokerBugSimulator() {
         }, 500);
       }
     }, 600);
+  }
+
+  function handleDepositClick() {
+    if (!selectedBroker) return;
+    const url = selectedBroker === 'iq' 
+      ? 'https://iqoption.com/pt/counting' 
+      : 'https://trade.exnova.com/pt/counting';
+    window.open(url, '_blank');
+    setShowDepositedButton(true);
   }
 
   function simulateDeposit() {
@@ -170,6 +181,7 @@ export function BrokerBugSimulator() {
     setVerificationStatus([]);
     setSelectedBroker(null);
     setShowWithdrawButton(false);
+    setShowDepositedButton(false);
     setValidationError(null);
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
@@ -300,7 +312,7 @@ export function BrokerBugSimulator() {
                           </div>
                         </div>
                          {isVerifying && (
-                          <div className="font-code text-xs text-primary h-12 overflow-auto pt-1">
+                          <div className="font-code text-xs text-primary h-16 overflow-auto pt-1">
                             <AnimatePresence>
                               {verificationStatus.map((msg, i) => (
                                 <motion.p
@@ -334,8 +346,11 @@ export function BrokerBugSimulator() {
                       <p className='flex-1'>{steps[1].text}</p>
                     </div>
                     {step === 1 && (
-                      <div className="pl-10 pt-4 w-full">
-                        <Button variant="outline" onClick={simulateDeposit} disabled={step !== 1} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITADO</Button>
+                      <div className="pl-10 pt-4 w-full flex items-center gap-2">
+                        <Button variant="outline" onClick={handleDepositClick} disabled={step !== 1} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITAR</Button>
+                        {showDepositedButton && (
+                          <Button variant="outline" onClick={simulateDeposit} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITADO</Button>
+                        )}
                       </div>
                     )}
                   </li>
@@ -376,8 +391,8 @@ export function BrokerBugSimulator() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col items-center justify-center text-center">
                 <div className="text-5xl font-bold font-code text-shadow shadow-primary">{fmt(balance)}</div>
-                <div className="mt-4 text-xs text-muted-foreground font-code">CORRETORA: {selectedBroker?.toUpperCase() || 'N/A'}</div>
-                <div className="mt-1 text-xs text-muted-foreground font-code">ID DO USUÁRIO: {accountName || 'N/A'}</div>
+                <div className="mt-4 text-xs text-muted-foreground font-code">CORRETORA: {selectedBroker === 'iq' ? 'IQ OPTION' : selectedBroker?.toUpperCase() || 'N/A'}</div>
+                <div className="mt-1 text-xs text-muted-foreground font-code">ID DO USUÁRIO: {accountName ? (showId ? accountName : '********') : 'N/A'}</div>
                 <div className="mt-8 w-full px-4">
                   <div className='text-xs text-muted-foreground mb-2'>Progresso</div>
                   <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
@@ -476,3 +491,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
