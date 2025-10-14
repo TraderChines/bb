@@ -290,7 +290,7 @@ export function BrokerBugSimulator() {
                     </div>
                      {step === 2 && (
                       <div className="pl-10 pt-4 w-full">
-                        <Button className="bg-sky-600/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">OPERAÇÃO ABERTA</Button>
+                        <Button className="bg-sky-500/80 hover:bg-sky-500/90 text-sky-100 border border-sky-500/60 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">OPERAÇÃO ABERTA</Button>
                       </div>
                     )}
                   </li>
@@ -301,7 +301,7 @@ export function BrokerBugSimulator() {
                      </div>
                      {step === 3 && (
                         <div className="pl-10 pt-4 w-full">
-                           <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/40 hover:bg-red-500/50 text-red-200 border border-red-500/50 font-code tracking-widest text-base shadow-lg shadow-red-500/20 hover:shadow-red-500/30">
+                           <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-600 hover:bg-red-700 text-white border border-red-500/50 font-code tracking-widest text-base shadow-lg shadow-red-500/30 hover:shadow-red-500/40">
                               <ShieldAlert className="mr-2" />
                               EXECUTAR BUG
                            </Button>
@@ -326,8 +326,8 @@ export function BrokerBugSimulator() {
                   <div className='text-xs text-muted-foreground mb-2'>Progresso</div>
                   <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
                    {showWithdrawButton && (
-                    <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="flex flex-col gap-2">
-                      <Button onClick={handleWithdraw} className="bg-primary/90 hover:bg-primary text-white mt-6 w-full font-code tracking-widest text-base shadow-lg shadow-primary/20 hover:shadow-primary/30">
+                    <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="flex flex-col gap-2 mt-6">
+                      <Button onClick={handleWithdraw} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-code tracking-widest text-base shadow-lg shadow-primary/30 hover:shadow-primary/40">
                         RETIRAR SALDO
                       </Button>
                       <Button variant="secondary" onClick={resetSimulation} className="font-code w-full">REINICIAR</Button>
@@ -408,5 +408,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
