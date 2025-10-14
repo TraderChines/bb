@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { AlertCircle, ArrowRight, CheckCircle, Cpu, ShieldAlert, XCircle } from 'lucide-react';
 
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
@@ -182,57 +183,75 @@ export function BrokerBugSimulator() {
 
   const getStepClass = (s: number, special: boolean = false) =>
     cn(
-      "p-3 rounded-md transition-colors text-sm",
-       step >= s && s !== 0.5 ? "bg-accent/20 text-accent-foreground border border-accent/50" : "bg-card-foreground/5",
-       s === 3 && step >= 3 && "bg-yellow-800/30 text-yellow-200 border border-yellow-700",
-
+      "p-4 rounded-lg transition-all text-sm border flex items-start gap-4",
+       step >= s && s !== 0.5 
+         ? "bg-primary/10 border-primary/30 text-primary-foreground" 
+         : "bg-white/5 border-white/10 text-muted-foreground",
     );
 
   const steps = [
-    'Deposite 1k - clique em "Depositado"',
-    '3. Abrir operação com todo saldo',
-    'Clique em BUG para adicionar 10 mil',
+    { text: 'Conecte-se à sua conta da corretora.', step: 0 },
+    { text: 'Faça um depósito inicial para começar.', step: 1 },
+    { text: 'Inicie uma operação com seu saldo.', step: 2 },
+    { text: 'Execute o exploit para aumentar o saldo.', step: 3 },
   ];
+
+  const StepIcon = ({ s }: {s: number}) => {
+    const isComplete = step > s;
+    const isActive = step === s;
+    if (isComplete) return <CheckCircle className="text-primary" />;
+    if (isActive) return <ArrowRight className="text-primary animate-pulse" />;
+    return <AlertCircle className="text-muted-foreground" />;
+  }
 
   return (
     <>
-      <Card className="w-full max-w-4xl bg-card/60 backdrop-blur-md border-border/20 shadow-2xl">
-        <CardHeader>
-          <CardTitle className="font-headline text-2xl">Broker Breaker</CardTitle>
+      <Card className="w-full max-w-4xl bg-black/50 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
+        <CardHeader className="border-b border-primary/20">
+          <div className="flex items-center gap-3">
+            <Cpu size={28} className="text-primary" />
+            <div>
+              <CardTitle className="font-code text-2xl tracking-widest text-primary">BROKER BREAKER</CardTitle>
+              <CardDescription className="font-code text-xs text-primary/70">SIMULADOR DE EXPLORAÇÃO DE SALDO</CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <section className="md:col-span-2 space-y-4">
-            <Card className="bg-card/80">
-              <CardHeader>
-                <CardTitle className="text-lg">Passos</CardTitle>
+        <CardContent className="grid grid-cols-1 md:grid-cols-5 gap-6 p-6">
+          <section className="md:col-span-3 space-y-6">
+            <Card className="bg-transparent border-0 shadow-none">
+              <CardHeader className='p-0 pb-4'>
+                <CardTitle className="text-lg font-code text-primary/90">PAINEL DE CONTROLE</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className='p-0'>
                 <ol className="space-y-3 text-muted-foreground">
-                   <li className={cn(getStepClass(0), 'space-y-3')}>
-                    <p>Criar Conta</p>
+                   <li className={cn(getStepClass(0), 'flex-col')}>
+                    <div className='flex items-start gap-4 w-full'>
+                      <StepIcon s={0} />
+                      <p className='flex-1'>{steps[0].text}</p>
+                    </div>
                     {step < 0.5 && (
-                      <RadioGroup onValueChange={(value: 'iq' | 'exnova') => handleBrokerSelection(value)} className="grid grid-cols-2 gap-4 pt-2">
+                      <RadioGroup onValueChange={(value: 'iq' | 'exnova') => handleBrokerSelection(value)} className="grid grid-cols-2 gap-4 pt-4 w-full">
                         <div>
                           <RadioGroupItem value="iq" id="iq" className="peer sr-only" />
-                          <Label htmlFor="iq" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                          <Label htmlFor="iq" className="flex items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-primary/10 hover:text-primary-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer font-code tracking-widest">
                             IQ OPTION
                           </Label>
                         </div>
                         <div>
                           <RadioGroupItem value="exnova" id="exnova" className="peer sr-only" />
-                          <Label htmlFor="exnova" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                          <Label htmlFor="exnova" className="flex items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-primary/10 hover:text-primary-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer font-code tracking-widest">
                             EXNOVA
                           </Label>
                         </div>
                       </RadioGroup>
                     )}
                     {step >= 0.5 && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-2 pt-2 border-l border-border/20">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end pl-10 pt-4 w-full">
                         <div className="space-y-2">
-                          <Label htmlFor="accountName" className="text-muted-foreground text-xs">ID do usuario</Label>
-                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} placeholder="Ex: 00000000" disabled={step !== 0.5 || isVerifying} />
+                          <Label htmlFor="accountName" className="text-muted-foreground text-xs font-code">SEU ID DE USUÁRIO</Label>
+                          <Input id="accountName" value={accountName} onChange={(e) => setAccountName(e.target.value.replace(/[^0-9]/g, ''))} placeholder="00000000" disabled={step !== 0.5 || isVerifying} className="font-code"/>
                            {isVerifying && (
-                            <div className="font-code text-xs text-green-400 h-12 overflow-auto pt-1">
+                            <div className="font-code text-xs text-primary h-12 overflow-auto pt-1">
                               <AnimatePresence>
                                 {verificationStatus.map((msg, i) => (
                                   <motion.p
@@ -241,7 +260,7 @@ export function BrokerBugSimulator() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3 }}
                                   >
-                                    &gt; {msg}
+                                    &gt; {msg}...
                                   </motion.p>
                                 ))}
                               </AnimatePresence>
@@ -249,73 +268,67 @@ export function BrokerBugSimulator() {
                           )}
                         </div>
                         <div className="flex items-end">
-                           <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying || accountName.length < 5} size="sm">enviar ID</Button>
+                           <Button onClick={handleVerification} disabled={step !== 0.5 || isVerifying || accountName.length < 5} size="sm" variant="outline" className='border-primary/50 hover:bg-primary/10 font-code'>VERIFICAR</Button>
                         </div>
                       </div>
                     )}
                   </li>
-                  <li className={cn(getStepClass(1), 'space-y-3')}>
-                    {steps[0]}
+                  <li className={cn(getStepClass(1), 'flex-col')}>
+                    <div className='flex items-start gap-4 w-full'>
+                      <StepIcon s={1} />
+                      <p className='flex-1'>{steps[1].text}</p>
+                    </div>
                     {step === 1 && (
-                      <div className="pl-2 pt-2 border-l border-border/20">
-                        <Button variant="accent" onClick={simulateDeposit} disabled={step !== 1} size="sm">Depositado</Button>
+                      <div className="pl-10 pt-4 w-full">
+                        <Button variant="outline" onClick={simulateDeposit} disabled={step !== 1} size="sm" className='border-primary/50 hover:bg-primary/10 font-code'>DEPOSITADO</Button>
                       </div>
                     )}
                   </li>
-                  <li className={cn(getStepClass(2), 'space-y-3')}>
-                    {steps[1]}
+                  <li className={cn(getStepClass(2), 'flex-col')}>
+                    <div className='flex items-start gap-4 w-full'>
+                      <StepIcon s={2} />
+                      <p className='flex-1'>{steps[2].text}</p>
+                    </div>
                      {step === 2 && (
-                      <div className="pl-2 pt-2 border-l border-border/20">
-                        <Button className="bg-sky-600 hover:bg-sky-500 text-white" onClick={openTradeAll} disabled={step !== 2} size="sm">Operação Aberta</Button>
+                      <div className="pl-10 pt-4 w-full">
+                        <Button className="bg-sky-600/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">ABRIR OPERAÇÃO</Button>
                       </div>
                     )}
                   </li>
-                  <li className={getStepClass(3, true)}>
-                    {steps[2]}
+                  <li className={getStepClass(3)}>
+                     <StepIcon s={3} />
+                    <p>{steps[3].text}</p>
                   </li>
                 </ol>
 
-                <div className="mt-6 flex flex-wrap gap-2">
-                  <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3}>BUG</Button>
-                  <Button variant="secondary" onClick={resetSimulation}>Resetar</Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/80">
-              <CardHeader>
-                <CardTitle className="text-lg">Log de ações</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="font-code text-xs text-muted-foreground h-28 overflow-auto p-3 bg-black/40 rounded-md">
-                  <p>&gt; Iniciado</p>
-                  {step >= 0.5 && <p>&gt; Corretora selecionada: {selectedBroker?.toUpperCase() || '—'}</p>}
-                  {step >= 1 && <p>&gt; Conta criada: {accountName || '—'}</p>}
-                  {step >= 2 && <p>&gt; Deposito efetuado: R$1.000</p>}
-                  {step >= 3 && <p>&gt; Operação aberta: saldo total</p>}
-                  {showHackerOverlay && <p className="text-yellow-400">&gt; Executando Glitch...</p>}
-                  {isAnimating && <p className="text-green-400">&gt; Animação em progresso...</p>}
-                  {showHackerOverlay && !isAnimating && accessGranted && <p className="text-green-400">&gt; Glitch finalizado.</p>}
-                  {showWithdrawButton && <p className="text-green-400 font-bold">&gt; Retirada disponível.</p>}
+                <div className="mt-8 flex flex-wrap gap-4 border-t border-primary/20 pt-6">
+                  <Button variant="destructive" onClick={runBugSimulation} disabled={step !== 3} className="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-code tracking-widest text-base shadow-lg shadow-red-500/10 hover:shadow-red-500/20">
+                    <ShieldAlert className="mr-2" />
+                    EXECUTAR BUG
+                  </Button>
+                  <Button variant="secondary" onClick={resetSimulation} className="font-code">REINICIAR</Button>
                 </div>
               </CardContent>
             </Card>
           </section>
 
-          <aside className="md:col-span-1">
-            <Card className="bg-card/80 flex flex-col items-center h-full">
-              <CardHeader className="items-center">
-                <CardTitle className="text-muted-foreground text-sm">SALDO ATUAL</CardTitle>
+          <aside className="md:col-span-2">
+            <Card className="bg-black/40 border-primary/20 flex flex-col items-center h-full">
+              <CardHeader className="items-center text-center">
+                <CardTitle className="font-code text-sm tracking-widest text-primary/80">SALDO EM CONTA</CardTitle>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col items-center justify-center text-center">
-                <div className="text-5xl font-bold font-headline">{fmt(balance)}</div>
-                <div className="mt-3 text-xs text-muted-foreground">Corretora: {selectedBroker?.toUpperCase() || '—'}</div>
-                <div className="mt-1 text-xs text-muted-foreground">ID do usuário: {accountName || '—'}</div>
-                <div className="mt-8 w-full">
-                  <div className="text-xs text-muted-foreground mb-2">Progresso</div>
-                  <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-green-500" />
+                <div className="text-5xl font-bold font-code text-shadow shadow-primary">{fmt(balance)}</div>
+                <div className="mt-4 text-xs text-muted-foreground font-code">CORRETORA: {selectedBroker?.toUpperCase() || 'N/A'}</div>
+                <div className="mt-1 text-xs text-muted-foreground font-code">ID: {accountName || 'N/A'}</div>
+                <div className="mt-8 w-full px-4">
+                  <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
                    {showWithdrawButton && (
-                    <Button onClick={handleWithdraw} className="bg-green-600 hover:bg-green-500 text-white mt-4 w-full">Retirar</Button>
+                    <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}}>
+                      <Button onClick={handleWithdraw} className="bg-primary/90 hover:bg-primary text-white mt-6 w-full font-code tracking-widest text-base shadow-lg shadow-primary/20 hover:shadow-primary/30">
+                        RETIRAR SALDO
+                      </Button>
+                    </motion.div>
                   )}
                 </div>
               </CardContent>
@@ -330,7 +343,7 @@ export function BrokerBugSimulator() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -339,28 +352,28 @@ export function BrokerBugSimulator() {
               transition={{ duration: 0.35 }}
               className="w-full max-w-2xl"
             >
-              <Card className="bg-black/80 border border-green-700 shadow-2xl shadow-green-900/50">
+              <Card className="bg-black/90 border border-primary/50 shadow-2xl shadow-primary/20">
                 <CardHeader className="flex-row items-start justify-between">
                   <div>
-                    <CardTitle className="font-code text-xl text-green-400">GLITCH.EXE</CardTitle>
-                    <CardDescription className="text-xs text-green-300/70">Executando exploit de saldo</CardDescription>
+                    <CardTitle className="font-code text-xl text-primary tracking-widest">GLITCH.EXE</CardTitle>
+                    <CardDescription className="text-xs text-primary/70 font-code">EXECUTANDO EXPLOIT DE SALDO...</CardDescription>
                   </div>
-                   <Button size="sm" variant="ghost" className="text-muted-foreground hover:bg-white/10" onClick={() => setShowHackerOverlay(false)}>Fechar</Button>
+                   <Button size="icon" variant="ghost" className="text-muted-foreground hover:bg-white/10 h-8 w-8" onClick={() => setShowHackerOverlay(false)}><X/></Button>
                 </CardHeader>
 
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-3 bg-black/40 rounded-md border border-green-900/50">
-                    <div className="h-32 overflow-hidden font-code text-xs leading-tight">
+                  <div className="p-4 bg-black/60 rounded-md border border-primary/20">
+                    <div className="h-32 overflow-hidden font-code text-sm leading-relaxed">
                         <AnimatePresence>
                         {deniedMessages.map((msg, i) => (
                           <motion.p
                             key={i}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="text-red-500"
+                            transition={{ duration: 0.2, delay: i * 0.1 }}
+                            className="text-red-400 flex items-center gap-2"
                           >
-                           &gt; {msg}
+                           <XCircle size={16}/> {msg}
                           </motion.p>
                         ))}
                       </AnimatePresence>
@@ -368,19 +381,19 @@ export function BrokerBugSimulator() {
                          <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.1, duration: 0.2 }}
-                            className="text-green-400 font-bold"
+                            transition={{ delay: 0.2, duration: 0.2 }}
+                            className="text-primary font-bold flex items-center gap-2"
                           >
-                           &gt; ACESSO CONCEDIDO
+                           <CheckCircle size={16}/> ACESSO CONCEDIDO
                           </motion.p>
                       )}
                     </div>
                   </div>
-                  <div className="p-3 bg-black/40 rounded-md border border-green-900/50 flex flex-col items-center justify-center">
-                    <div className="text-sm text-gray-200">Transformando</div>
-                    <div className="text-4xl font-bold mt-2 text-green-300 font-headline">{fmt(balance)}</div>
+                  <div className="p-4 bg-black/60 rounded-md border border-primary/20 flex flex-col items-center justify-center">
+                    <div className="text-sm text-gray-200 font-code">INJETANDO SALDO</div>
+                    <div className="text-4xl font-bold mt-2 text-primary font-code text-shadow shadow-primary">{fmt(balance)}</div>
                     <div className="mt-3 w-full space-y-2">
-                       <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-green-500" />
+                       <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
                     </div>
                   </div>
                 </CardContent>
