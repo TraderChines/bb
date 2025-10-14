@@ -103,7 +103,7 @@ export function BrokerBugSimulator() {
     const messages = [
       "> INICIANDO BYPASS DE FIREWALL...",
       "> ACESSO AO KERNEL REJEITADO... TENTANDO NOVAMENTE...",
-      "> ESCALANDO PRIVILÉGIOS DE ACESSO...",
+      "> FORÇANDO OVERRIDE DE SEGURANÇA...",
     ];
 
     let messageIndex = 0;
@@ -324,7 +324,7 @@ export function BrokerBugSimulator() {
                 <div className="mt-1 text-xs text-muted-foreground font-code">ID DO USUÁRIO: {accountName || 'N/A'}</div>
                 <div className="mt-8 w-full px-4">
                   <div className='text-xs text-muted-foreground mb-2'>Progresso</div>
-                  <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
+                  <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&gt;div]:bg-primary" />
                    {showWithdrawButton && (
                     <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="flex flex-col gap-2 mt-6">
                       <Button onClick={handleWithdraw} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-code tracking-widest text-base shadow-lg shadow-primary/30 hover:shadow-primary/40">
@@ -366,7 +366,7 @@ export function BrokerBugSimulator() {
 
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-black/60 rounded-md border border-primary/20">
-                    <div className="h-32 overflow-hidden font-code text-sm leading-relaxed">
+                    <div className="h-48 overflow-hidden font-code text-sm leading-relaxed">
                         <AnimatePresence>
                         {deniedMessages.map((msg, i) => (
                           <motion.p
@@ -381,14 +381,26 @@ export function BrokerBugSimulator() {
                         ))}
                       </AnimatePresence>
                       {accessGranted && (
+                        <>
                          <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2, duration: 0.2 }}
                             className="text-primary font-bold flex items-center gap-2"
                           >
-                           <CheckCircle size={16}/> > VIOLAÇÃO BEM-SUCEDIDA! ACESSO TOTAL.
+                           <CheckCircle size={16}/> &gt; VIOLAÇÃO BEM-SUCEDIDA! ACESSO TOTAL.
                           </motion.p>
+                          {!isAnimating && showWithdrawButton && (
+                            <motion.p
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: 0.4, duration: 0.2 }}
+                              className="text-primary font-bold flex items-center gap-2"
+                            >
+                            <CheckCircle size={16}/> &gt; SALDO INJETADO. EXECUTADO COM SUCESSO.
+                            </motion.p>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -396,7 +408,7 @@ export function BrokerBugSimulator() {
                     <div className="text-sm text-gray-200 font-code">INJETANDO SALDO</div>
                     <div className="text-4xl font-bold mt-2 text-primary font-code text-shadow shadow-primary">{fmt(balance)}</div>
                     <div className="mt-3 w-full space-y-2">
-                       <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&>div]:bg-primary" />
+                       <Progress value={((balance - 1000) / 9000) * 100} className="h-2 [&gt;div]:bg-primary" />
                     </div>
                   </div>
                 </CardContent>
@@ -408,3 +420,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
