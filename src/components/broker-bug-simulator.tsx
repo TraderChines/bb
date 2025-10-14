@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { AlertCircle, ArrowRight, CheckCircle, Cpu, ShieldAlert, XCircle } from 'lucide-react';
+import { AlertCircle, ArrowRight, CheckCircle, Cpu, ShieldAlert, XCircle, X } from 'lucide-react';
 
 export function BrokerBugSimulator() {
   const [step, setStep] = useState(0);
@@ -405,3 +405,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
