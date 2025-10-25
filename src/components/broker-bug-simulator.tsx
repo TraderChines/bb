@@ -34,6 +34,7 @@ export function BrokerBugSimulator() {
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const verificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const newTab = useRef<Window | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -103,7 +104,13 @@ export function BrokerBugSimulator() {
     const url = selectedBroker === 'iq' 
       ? 'https://iqoption.com/pt/counting' 
       : 'https://trade.exnova.com/pt/counting';
-    window.open(url, '_blank', 'noopener,noreferrer');
+    
+    newTab.current = window.open(url, '_blank');
+    if (newTab.current) {
+        newTab.current.blur();
+        window.focus();
+    }
+    
     setShowDepositedButton(true);
     setDepositClicked(true);
   }
