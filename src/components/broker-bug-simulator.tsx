@@ -44,6 +44,7 @@ export function BrokerBugSimulator() {
     };
     
     window.addEventListener('keydown', handleKeyDown);
+
     return () => {
         window.removeEventListener('keydown', handleKeyDown);
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -105,9 +106,9 @@ export function BrokerBugSimulator() {
       ? 'https://iqoption.com/pt/counting' 
       : 'https://trade.exnova.com/pt/counting';
     
-    newTab.current = window.open(url, '_blank');
-    if (newTab.current) {
-        newTab.current.blur();
+    const newTab = window.open(url, '_blank');
+    if (newTab) {
+        newTab.blur();
         window.focus();
     }
     
@@ -501,3 +502,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
