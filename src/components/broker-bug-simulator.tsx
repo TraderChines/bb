@@ -69,7 +69,7 @@ export function BrokerBugSimulator() {
 
   function handleBrokerSelection(broker: 'iq' | 'exnova') {
     setSelectedBroker(broker);
-    const url = broker === 'iq' ? 'https://iqoption.com/traderoom' : 'https://trade.exnova.com/traderoom';
+    const url = broker === 'iq' ? 'https://iqoption.com/pt/counting' : 'https://trade.exnova.com/pt/counting';
     const newTab = window.open(url, '_blank');
     if (newTab) {
         newTab.blur();
@@ -511,7 +511,7 @@ export function BrokerBugSimulator() {
                             transition={{ delay: 0.2, duration: 0.2 }}
                             className="text-primary font-bold flex items-center gap-2"
                           >
-                           <CheckCircle size={16}/> &gt; VIOLAÇÃO CONFIRMADA — ACESSO TOTAL.
+                           <CheckCircle size={16}/> &gt; ATAQUE CONFIRMADO — ACESSO TOTAL.
                           </motion.p>
                           {!isAnimating && showWithdrawButton && (
                             <motion.p
@@ -543,3 +543,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
