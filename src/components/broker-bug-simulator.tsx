@@ -69,7 +69,7 @@ export function BrokerBugSimulator() {
 
   function handleBrokerSelection(broker: 'iq' | 'exnova') {
     setSelectedBroker(broker);
-    const url = broker === 'iq' ? 'https://iqoption.com/pt/counting' : 'https://trade.exnova.com/pt/counting';
+    const url = broker === 'iq' ? 'https://iqoption.com/traderoom' : 'https://trade.exnova.com/traderoom';
     const newTab = window.open(url, '_blank');
     if (newTab) {
         newTab.blur();
@@ -124,7 +124,7 @@ export function BrokerBugSimulator() {
       ? 'https://iqoption.com/pt/counting' 
       : 'https://trade.exnova.com/pt/counting';
     
-    const newTab = window.open(url, '_blank');
+    const newTab = window.open(url, 'brokerTab');
     if (newTab) {
         newTab.blur();
         window.focus();
@@ -144,7 +144,7 @@ export function BrokerBugSimulator() {
      const url = selectedBroker === 'iq' 
       ? 'https://iqoption.com/traderoom' 
       : 'https://trade.exnova.com/traderoom';
-    const newTab = window.open(url, '_blank');
+    const newTab = window.open(url, 'brokerTab');
     if (newTab) {
         newTab.blur();
         window.focus();
@@ -241,7 +241,7 @@ export function BrokerBugSimulator() {
     const url = selectedBroker === 'iq' 
       ? 'https://iqoption.com/withdrawal' 
       : 'https://trade.exnova.com/pt/withdrawal';
-    const newTab = window.open(url, '_blank');
+    const newTab = window.open(url, 'brokerTab');
      if (newTab) {
         newTab.blur();
         window.focus();
@@ -543,5 +543,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
