@@ -34,10 +34,12 @@ export function BrokerBugSimulator() {
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const verificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
+
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === 'Semicolon') {
+      if (event.code === 'Semicolon') { // "ç" key
         setIsSystemOnline(prev => !prev);
       }
     };
@@ -49,13 +51,30 @@ export function BrokerBugSimulator() {
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
         if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
         if (verificationIntervalRef.current) clearInterval(verificationIntervalRef.current);
+        if (pressTimerRef.current) clearTimeout(pressTimerRef.current);
     };
   }, []);
+
+  const handlePressStart = () => {
+    pressTimerRef.current = setTimeout(() => {
+      setIsSystemOnline(prev => !prev);
+    }, 2000);
+  };
+
+  const handlePressEnd = () => {
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+    }
+  };
 
   function handleBrokerSelection(broker: 'iq' | 'exnova') {
     setSelectedBroker(broker);
     const url = broker === 'iq' ? 'https://iqoption.com' : 'https://exnova.org/';
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const newTab = window.open(url, '_blank');
+    if (newTab) {
+        newTab.blur();
+        window.focus();
+    }
     setStep(0.5);
   }
 
@@ -202,6 +221,9 @@ export function BrokerBugSimulator() {
     if (verificationIntervalRef.current) {
       clearInterval(verificationIntervalRef.current);
     }
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+    }
     setIsAnimating(false);
   }
 
@@ -210,14 +232,18 @@ export function BrokerBugSimulator() {
     const url = selectedBroker === 'iq' 
       ? 'https://iqoption.com/pt/withdrawal' 
       : 'https://trade.exnova.com/pt/withdrawal';
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const newTab = window.open(url, '_blank');
+     if (newTab) {
+        newTab.blur();
+        window.focus();
+    }
   }
 
   function fmt(v: number) {
     return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
   }
 
-  const getStepClass = (s: number, special: boolean = false) =>
+  const getStepClass = (s: number) =>
     cn(
       "p-4 rounded-lg transition-all text-sm border flex items-start gap-4",
        step >= s && s !== 0.5 
@@ -252,7 +278,14 @@ export function BrokerBugSimulator() {
                 <CardDescription className="font-code text-xs text-primary/70">INJETOR DE SALDO</CardDescription>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div 
+              className="flex items-center gap-2 cursor-pointer"
+              onMouseDown={handlePressStart}
+              onMouseUp={handlePressEnd}
+              onMouseLeave={handlePressEnd}
+              onTouchStart={handlePressStart}
+              onTouchEnd={handlePressEnd}
+            >
               <div className="relative flex h-3 w-3">
                 {isSystemOnline && <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/70 opacity-75"></div>}
                 <div className="relative inline-flex rounded-full h-3 w-3 bg-primary"></div>
@@ -501,3 +534,5 @@ export function BrokerBugSimulator() {
     </>
   );
 }
+
+    
