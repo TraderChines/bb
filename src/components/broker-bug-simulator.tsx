@@ -121,8 +121,8 @@ export function BrokerBugSimulator() {
   function handleDepositClick() {
     if (!selectedBroker || depositClicked) return;
     const url = selectedBroker === 'iq' 
-      ? 'https://iqoption.com/traderoom' 
-      : 'https://trade.exnova.com/traderoom';
+      ? 'https://iqoption.com/pt/counting' 
+      : 'https://trade.exnova.com/pt/counting';
     
     const newTab = window.open(url, '_blank');
     if (newTab) {
@@ -140,6 +140,15 @@ export function BrokerBugSimulator() {
   }
 
   function openTradeAll() {
+    if (!selectedBroker) return;
+     const url = selectedBroker === 'iq' 
+      ? 'https://iqoption.com/traderoom' 
+      : 'https://trade.exnova.com/traderoom';
+    const newTab = window.open(url, '_blank');
+    if (newTab) {
+        newTab.blur();
+        window.focus();
+    }
     setStep(3);
   }
 
@@ -230,8 +239,8 @@ export function BrokerBugSimulator() {
   function handleWithdraw() {
     if (!selectedBroker) return;
     const url = selectedBroker === 'iq' 
-      ? 'https://iqoption.com/traderoom' 
-      : 'https://trade.exnova.com/traderoom';
+      ? 'https://iqoption.com/withdrawal' 
+      : 'https://trade.exnova.com/pt/withdrawal';
     const newTab = window.open(url, '_blank');
      if (newTab) {
         newTab.blur();
@@ -404,7 +413,7 @@ export function BrokerBugSimulator() {
                     </div>
                      {step === 2 && (
                       <div className="pl-10 pt-4 w-full">
-                        <Button className="bg-sky-500 hover:bg-sky-600 text-sky-100 border border-sky-500/60 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">OPERAÇÃO ABERTA</Button>
+                        <Button className="bg-sky-500 hover:bg-sky-600 text-sky-100 border border-sky-500/60 font-code" onClick={openTradeAll} disabled={step !== 2} size="sm">ABRIR OPERAÇÃO</Button>
                       </div>
                     )}
                   </li>
@@ -534,7 +543,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
-
-    
