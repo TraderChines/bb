@@ -26,7 +26,7 @@ export function BrokerBugSimulator() {
   const [selectedBroker, setSelectedBroker] = useState<'iq' | 'exnova' | null>(null);
   const [showWithdrawButton, setShowWithdrawButton] = useState(false);
   const [showId, setShowId] = useState(false);
-  const [isSystemOnline, setIsSystemOnline] = useState(true);
+  const [isSystemOnline, setIsSystemOnline] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [showDepositedButton, setShowDepositedButton] = useState(false);
   const [depositClicked, setDepositClicked] = useState(false);
@@ -34,7 +34,6 @@ export function BrokerBugSimulator() {
   const rafRef = useRef<number | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const verificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const newTab = useRef<Window | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -502,5 +501,3 @@ export function BrokerBugSimulator() {
     </>
   );
 }
-
-    
