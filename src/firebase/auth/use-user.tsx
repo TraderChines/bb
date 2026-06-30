@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useFirebase } from './provider';
+import { useFirebase } from '../provider';
 
 export function useUser() {
   const { user, loading } = useFirebase();

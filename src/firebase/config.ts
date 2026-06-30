@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB...", // Substituído pelas credenciais reais do projeto
+  apiKey: "AIzaSyB...", // Configuração mantida conforme provisionamento
   authDomain: "nextn-...",
   projectId: "nextn-...",
   storageBucket: "nextn-...",
