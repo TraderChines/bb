@@ -43,3 +43,13 @@ export function useFirebase() {
   }
   return context;
 }
+
+export function useFirestore() {
+  const { db } = useFirebase();
+  return db;
+}
+
+export function useAuth() {
+  const { auth } = useFirebase();
+  return auth;
+}
