@@ -1,36 +1,35 @@
-# Configuração do GitHub - Broker Breaker
+# Configuração do GitHub & Deploy Automático - Broker Breaker
 
-Para enviar este projeto para o seu repositório, execute os seguintes comandos no terminal:
+Para enviar este projeto para o seu repositório e ativar o deploy automático, siga estas etapas:
 
-1. **Inicializar o Git**:
+## 1. Enviar para o GitHub
+Execute os seguintes comandos no terminal:
+
 ```bash
 git init
-```
-
-2. **Adicionar os arquivos**:
-```bash
 git add .
-```
-
-3. **Criar o primeiro commit**:
-```bash
-git commit -m "Initial commit from Firebase Studio"
-```
-
-4. **Configurar o branch principal**:
-```bash
+git commit -m "Configuração de deploy automático via GitHub Actions"
 git branch -M main
-```
-
-5. **Vincular ao seu repositório**:
-```bash
 git remote add origin https://github.com/TraderChines/bb.git
-```
-
-6. **Enviar para o GitHub**:
-```bash
 git push -u origin main
 ```
 
+## 2. Configurar o Segredo de Deploy (Obrigatório para GitHub Actions)
+Para que o GitHub tenha permissão de fazer o deploy no Firebase:
+
+1. No **Console do Firebase**, vá em **Configurações do Projeto** > **Contas de Serviço**.
+2. Clique em **Gerar nova chave privada** e baixe o arquivo JSON.
+3. No seu repositório no **GitHub**, vá em **Settings** > **Secrets and variables** > **Actions**.
+4. Clique em **New repository secret**.
+5. Nome: `FIREBASE_SERVICE_ACCOUNT_STUDIO_6066508295_D330E`.
+6. Valor: Cole todo o conteúdo do arquivo JSON que você baixou.
+
+## 3. Firebase App Hosting (Alternativa Recomendada)
+Para projetos Next.js 15, o **App Hosting** é a solução nativa e mais simples do Firebase:
+1. No [Console do Firebase](https://console.firebase.google.com/), acesse **App Hosting**.
+2. Clique em **Começar** e conecte seu GitHub.
+3. Selecione o repositório `TraderChines/bb`.
+4. O Firebase gerencia o deploy automaticamente sem necessidade de configurar segredos manuais no GitHub.
+
 ---
-**Nota:** Se o terminal solicitar suas credenciais do GitHub e você tiver autenticação de dois fatores ativa, utilize um **Personal Access Token (PAT)** no lugar da senha.
+Os arquivos de workflow e o `firebase.json` já foram configurados para suportar o deploy automático via frameworks.
